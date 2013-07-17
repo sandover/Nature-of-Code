@@ -4,55 +4,40 @@
 #include "Greenhouse.h"
 
 /**
- 
+
  A port to Greenhouse of examples from The Nature of Code by Daniel Shiffman
- 
+
  Example 1-5: Vector magnitude
- 
+
  **/
 
 
-class PointingTracker  :  public Thing
-{ public:
-  
-  Vect pointerLoc;
-  Vect vertex;
-  float m; // magnitude
-  float h; // bar height
-  
-  PointingTracker ()  :  Thing ()
-  { SlapOnFeld ();
-    h = 3.0;
-  }
-  
+struct PointingTracker  :  public Sketch
+{
+  Vect mouse;
+  float64 h = 3.0; // bar height
+
   void PointingMove (PointingEvent *e)
-  { // pointer location
-    pointerLoc = Intersection (e, Loc ());
-    
-    // subtract the feld location
-    vertex = pointerLoc - Loc ();
-    
-    // get the magnitude
-    m = vertex.Mag();
-  }
-  
+    { // pointer location in absolute coords
+      mouse = Intersection (e, Loc ());
+
+      // pointer location in sketch-local coords
+      mouse = WrangleLoc (mouse);
+    }
+
   void DrawSelf ()
-  { // draw line
-    SetGLColor (Color (1, 1, 1));
-    glLineWidth(2.0);
-    glBegin (GL_LINES);
-    glVertex (Vect (0, 0, 0));
-    glVertex (vertex);
-    glEnd ();
-    
-    // draw bar (DrawQuad draws from the bottom left corner)
-    DrawQuad (Vect (-Feld () -> Width () / 2, Feld () -> Height () / 2 - h, 0), Vect (m, 0, 0), Vect (0, h, 0));
-  }
-  
+    { Clear ();
+      DrawLine (Vect (0, 0, 0), mouse);
+      DrawRect (WrangleLoc (Inside (Feld (), Vect (-0.5, 0.5, 0))) +
+                Feld () -> Over () * mouse . Mag () / 2,
+                mouse . Mag (),
+                10);
+    }
 };
 
 
 void Setup ()
 { SetFeldsColor (Color ("#A8BBBA"));
-  new PointingTracker ();
+  PointingTracker * p = new PointingTracker ();
+  p -> SlapOnFeld ();
 }

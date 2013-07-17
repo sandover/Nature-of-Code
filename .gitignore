@@ -27,4 +27,7 @@
 *.out
 *.app
 
-*.dSYM
+# Mac debugging symbols
+*.dSYM/
+
+

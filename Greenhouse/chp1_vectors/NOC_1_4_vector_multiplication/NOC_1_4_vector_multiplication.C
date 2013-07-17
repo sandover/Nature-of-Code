@@ -4,49 +4,35 @@
 #include "Greenhouse.h"
 
 /**
- 
+
  A port to Greenhouse of examples from The Nature of Code by Daniel Shiffman
- 
+
  Example 1-4: Vector multiplication
- 
+
  **/
 
 
-class PointingTracker  :  public Thing
-{ public:   
-    
-  Vect pointerLoc;
-  Vect vertex;
-    
-  PointingTracker ()  :  Thing ()
-    { SlapOnFeld ();
-    }
-    
+struct PointingTracker  :  public Sketch
+{ Vect mouse;
+
   void PointingMove (PointingEvent *e)
     { // pointer location
-      pointerLoc = Intersection (e, Loc ());
-    
-      // subtract the feld location
-      vertex = pointerLoc - Loc ();
-      
-      // multiply the vector
-      vertex = vertex * .5;
-    }
-    
-  void DrawSelf ()
-    { // draw line
-      SetGLColor (Color (1, 1, 1));
-      glLineWidth(2.0);
-      glBegin (GL_LINES);
-      glVertex (Vect (0, 0, 0));
-      glVertex (vertex);
-      glEnd ();        
-    }
-    
-};
+      mouse = Intersection (e, Loc ());
 
+      // subtract the window's center
+      mouse = mouse - Loc ();
+
+      mouse *= 0.5;
+    }
+
+  void DrawSelf ()
+    { Clear ();
+      DrawLine (Vect (0, 0, 0), mouse);
+    }
+};
 
 void Setup ()
 { SetFeldsColor (Color ("#A8BBBA"));
-    new PointingTracker ();
+  PointingTracker * p = new PointingTracker ();
+  p -> SlapOnFeld ();
 }

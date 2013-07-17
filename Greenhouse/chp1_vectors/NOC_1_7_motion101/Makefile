@@ -13,7 +13,7 @@ CXXFLAGS = -Wempty-body \
   -fdiagnostics-show-option \
   -Wall \
   -Wpointer-arith \
-  -Wshadow \
+  -Wno-shadow \
   -Wwrite-strings \
   -Wno-overloaded-virtual \
   -Wno-strict-overflow \
@@ -45,10 +45,14 @@ export OB_SHARE_PATH=`pwd`/share:$$OB_SHARE_PATH
 endef
 export EXP_STR
 
-all: NOC_1_7_motion101
+all: NOC_1_7_motion101 NOC_1_7_motion101-alternate
 clean:
-	-rm NOC_1_7_motion101
+	-rm NOC_1_7_motion101 NOC_1_7_motion101-alternate
 
 NOC_1_7_motion101: NOC_1_7_motion101.C
+	${CXX} $^ ${LDFLAGS} ${MAGICKFLAGS} -lGreenhouse -lMagick++6-Q16 -lMagickCore6-Q16 -lboost_thread -lboost_system -lboost_filesystem ${CXXFLAGS} -o $@
+	@echo	"$(OK_COLOR)$$EXP_STR$(NO_COLOR)"
+
+NOC_1_7_motion101-alternate: NOC_1_7_motion101-alternate.C
 	${CXX} $^ ${LDFLAGS} ${MAGICKFLAGS} -lGreenhouse -lMagick++6-Q16 -lMagickCore6-Q16 -lboost_thread -lboost_system -lboost_filesystem ${CXXFLAGS} -o $@
 	@echo	"$(OK_COLOR)$$EXP_STR$(NO_COLOR)"
