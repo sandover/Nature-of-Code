@@ -17,12 +17,14 @@ struct PointingTracker  :  public Sketch
   Vect mouse;
   float64 h = 3.0; // bar height
 
-  void PointingMove (PointingEvent *e)
-    { // pointer location in absolute coords
-      mouse = Intersection (e, Loc ());
+  PointingTracker ()
+    { SetFillColor (Color (1, 1, 1));
+    }
 
-      // pointer location in sketch-local coords
-      mouse = WrangleLoc (mouse);
+
+  void PointingMove (PointingEvent *e)
+    { // pointer location in absolute coords, converted to sketch-local coords
+      mouse = WrangleLoc (Intersection (e));
     }
 
   void DrawSelf ()

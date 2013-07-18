@@ -16,12 +16,8 @@ struct PointingTracker  :  public Sketch
 { Vect mouse;
 
   void PointingMove (PointingEvent *e)
-    { // pointer location
-      mouse = Intersection (e, Loc ());
-
-      // subtract the window's center
-      mouse = mouse - Loc ();
-
+    { // pointer location in absolute coords, converted to sketch-local coords
+      mouse = WrangleLoc (Intersection (e));
       mouse *= 0.5;
     }
 

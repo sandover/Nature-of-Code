@@ -16,10 +16,11 @@ struct PointingTracker  :  public Sketch
 { Vect mouse;
 
   void PointingMove (PointingEvent *e)
-    { // pointer location
-      mouse = Intersection (e, Loc ());
+    { // pointer location in absolute coords
+      mouse = Intersection (e);
 
-      // subtract the window's center
+      //  subtract the Sketch's center to get coordinates that are
+      //  local to the Sketch
       mouse = mouse - Loc ();
     }
 

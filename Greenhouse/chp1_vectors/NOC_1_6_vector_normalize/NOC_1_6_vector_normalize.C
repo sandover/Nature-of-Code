@@ -18,11 +18,8 @@ struct PointingTracker  :  public Sketch
   float64 h = 3.0; // bar height
 
   void PointingMove (PointingEvent *e)
-    { // pointer location in absolute coords
-      mouse = Intersection (e, Loc ());
-
-      // pointer location in sketch-local coords
-      mouse = WrangleLoc (mouse);
+    { // pointer location in absolute coords, converted to sketch-local coords
+      mouse = WrangleLoc (Intersection (e));
     }
 
   void DrawSelf ()
